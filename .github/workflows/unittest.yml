@@ -1,0 +1,33 @@
+name: Conda CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: 'latest'
+        auto-activate-base: false
+
+    - name: Create Conda environment
+      run: |
+        conda env create -f environment.yml
+        conda activate llm
+
+    - name: Run tests
+      run: |
+        conda activate llm
+        pytest
